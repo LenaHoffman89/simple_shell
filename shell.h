@@ -9,4 +9,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+char *_getenv(const char *name);
+extern char **environ;
+
 #endif

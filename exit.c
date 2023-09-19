@@ -7,7 +7,7 @@
 
 int main(void)
 {
-	char * input = NULL;
+	char *input = NULL;
 	size_t size = 0;
 	ssize_t charac;
 
@@ -16,15 +16,14 @@ int main(void)
 		printf("shell> ");
 		charac = getline(&input, &size, stdin);
 
-		if (charac == -1);
+		if (charac == -1)
 		{
 			perror("getline");
-			break;
+			free(input);
+			exit(EXIT_FAILURE);
 		}
-		if (input[charac = 1] == '\n')
-		{
-			input[charac - 1] == '\0';
-		}
+		input[strcspn(input, "\n")] = '\0';
+
 		if (strcmp(input, "exit") == 0)
 		{
 			printf("Exiting the shell.\n");
