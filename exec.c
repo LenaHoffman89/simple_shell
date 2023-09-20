@@ -1,22 +1,33 @@
 #include "shell.h"
-
 /**
- * main - Allow to execute command
- *
- * Return: Always 0
+ * _execute - Allows to execute command
+ * @command: pointer containing command
+ * @argv: argument vector
+ * Return: nothing
  */
-
-int main(void)
+int _execute(char **command, char **argv)
 {
-	char *argv[] = {"ls", "-l", NULL};
+	pid_t child_pid = fork();
+	int status;
 
-	char *envv[] = {"NULL"};
-
-	printf("Before execve\n");
-	if (execve("/usr/bin/ls", argv, envv) == -1)
+	if (child_pid == -1)
 	{
-		perror("Error:");
+		perror("fork");
+		exit(EXIT_FAILURE);
 	}
-	printf("After execve\n");
-	return (0);
+	if (child_pid == 0)
+	{
+		if (execve(command[0], command, environ) == -1)
+		{
+			perror(argv[0]);
+			free(command);
+			exit(0);
+		}
+		else
+		{
+			waitpid(child_pid, &status, 0);
+			free(command);
+		};
+	}
+	return (WEXITSTATUS(status));
 }
